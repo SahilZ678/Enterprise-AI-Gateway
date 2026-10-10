@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+gateway:
+  api-key: ${GATEWAY_API_KEY}
+  cache:
+    enabled: true
+    ttl: 10m
+  rate-limit:
+    capacity: 20
+    refill-tokens: 20
+    refill-period: 1m
+
+ai:
+  ollama:
+    base-url: http://localhost:11434
+    allowed-models: qwen3.5:9b,qwen3:1.7b,gemma3:1b
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+
+  endpoint:
+    health:
+      show-details: never
+
+  metrics:
+    tags:
+      application: enterprise-ai-gateway
+
+    distribution:
+      percentiles-histogram:
+        ai.gateway.request.duration: true
+        ai.gateway.model.duration: true
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
